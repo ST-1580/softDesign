@@ -10,7 +10,7 @@ public class RedditUriBuilder implements UriBuilder {
         final StringBuilder uri = new StringBuilder("https://api.pushshift.io/reddit/search/submission/");
         uri.append("?")
             .append("sort_type=").append("created_utc")
-            .append("&after=").append(hours).append("d")
+            .append("&after=").append(hours).append("h")
             .append("&q=").append(tag)
             .append("&size=").append(250);
 

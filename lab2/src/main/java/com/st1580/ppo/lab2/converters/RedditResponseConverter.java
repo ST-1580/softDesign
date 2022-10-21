@@ -20,7 +20,7 @@ public class RedditResponseConverter extends ResponseConverter {
         final List<Long> timeStamps = new ArrayList<>();
         for (int i = 0; i < data.length(); i++) {
             long ts = data.getJSONObject(i).getLong("created_utc");
-            timeStamps.add(ts);
+            timeStamps.add(ts * 1000);
         }
 
         return super.getStatistics(timeStamps, System.currentTimeMillis(), hours);
