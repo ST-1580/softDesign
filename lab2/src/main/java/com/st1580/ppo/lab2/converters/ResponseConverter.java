@@ -26,10 +26,15 @@ public abstract class ResponseConverter {
 
         int timeSlot = 0;
         for (Long tagsT : tagsTsMillis) {
+            if (tagsT < startTs + timeSlot * ONE_HOUR_TS) {
+                continue;
+            }
             if (tagsT >= startTs + (timeSlot + 1) * ONE_HOUR_TS) {
                 timeSlot++;
+                if (timeSlot >= hours) {
+                    break;
+                }
             }
-            assert (timeSlot < hours);
 
             res.set(timeSlot, res.get(timeSlot) + 1);
         }

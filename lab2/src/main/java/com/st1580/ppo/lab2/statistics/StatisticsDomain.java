@@ -26,7 +26,7 @@ public enum StatisticsDomain {
         this.responseConverterClass = responseConverterClass;
     }
 
-    private URI buildUri(int hours, String tag) {
+    public URI buildUri(int hours, String tag) {
         try {
             return uriBuilderClass.getDeclaredConstructor().newInstance().buildURI(hours, tag);
         } catch (NoSuchMethodException | InvocationTargetException | InstantiationException | IllegalAccessException e) {
@@ -34,23 +34,11 @@ public enum StatisticsDomain {
         }
     }
 
-    private JSONObject send(URI uri) {
-        final RestTemplate template = new RestTemplate();
-        final String responseString = template.getForObject(uri, String.class);
-        return new JSONObject(responseString);
-    }
-
-    private List<Long> convertResponse(JSONObject json, int hours) {
+    public List<Long> convertResponse(JSONObject json, int hours) {
         try {
             return responseConverterClass.getDeclaredConstructor().newInstance().convertResponse(json, hours);
         } catch (NoSuchMethodException | InvocationTargetException | InstantiationException | IllegalAccessException e) {
             throw new RuntimeException("Can't find convert method for " + uriBuilderClass.getName());
         }
-    }
-
-    public List<Long> getStatistics(int hours, String tag) {
-        final URI uri = buildUri(hours, tag);
-        final JSONObject response = send(uri);
-        return convertResponse(response, hours);
     }
 }

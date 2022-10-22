@@ -1,7 +1,5 @@
 package com.st1580.ppo.lab2.converters;
 
-
-
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -23,6 +21,11 @@ public class RedditResponseConverter extends ResponseConverter {
             timeStamps.add(ts * 1000);
         }
 
-        return super.getStatistics(timeStamps, System.currentTimeMillis(), hours);
+        return getStatistics(timeStamps, System.currentTimeMillis(), hours);
+    }
+
+    @Override
+    protected List<Long> getStatistics(List<Long> tagsTsMillis, Long nowTs, int hours) {
+        return super.getStatistics(tagsTsMillis, nowTs, hours);
     }
 }
