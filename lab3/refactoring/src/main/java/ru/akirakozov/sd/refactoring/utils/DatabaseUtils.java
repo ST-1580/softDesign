@@ -43,4 +43,21 @@ public class DatabaseUtils {
             statement.executeUpdate(sql);
         }
     }
+    public static List<Item> getItems(final String dbName) {
+        final List<Item> items = new ArrayList<>();
+        try (Statement statement = connect(dbName).createStatement()) {
+            String sql = "SELECT * FROM PRODUCT";
+            ResultSet rs = statement.executeQuery(sql);
+
+            while (rs.next()) {
+                String name = rs.getString("name");
+                long price  = rs.getLong("price");
+                items.add(new Item(name, price));
+            }
+        } catch (SQLException ignored) {
+
+        }
+
+        return items;
+    }
 }
