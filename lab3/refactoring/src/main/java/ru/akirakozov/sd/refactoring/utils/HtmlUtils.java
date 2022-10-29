@@ -16,13 +16,11 @@ public class HtmlUtils {
         return res.toString();
     }
 
-    public static String covertMaxOrMin(Item item, boolean isMax) {
+    public static String covertItem(Item item, String header) {
         StringBuilder res = new StringBuilder();
 
         res.append("<html><body>").append("\n");
-        res.append("<h1>Product with ");
-        res.append(isMax ? "max" : "min");
-        res.append(" price: </h1>").append("\n");
+        res.append(header).append("\n");
         res.append(item.getName()).append("\t").append(item.getPrice()).append("</br>").append("\n");
         res.append("</body></html>").append("\n");
 
@@ -30,17 +28,17 @@ public class HtmlUtils {
     }
 
     public static String convertMax(Item item) {
-        return covertMaxOrMin(item, true);
+        return covertItem(item, "<h1>Product with max price: </h1>");
     }
 
     public static String convertMin(Item item) {
-        return covertMaxOrMin(item, false);
+        return covertItem(item, "<h1>Product with min price: </h1>");
     }
 
-    public static String covertSumOrCount(int value, boolean isSum) {
+    public static String covertInt(int value, String header) {
         StringBuilder res = new StringBuilder();
         res.append("<html><body>").append("\n");
-        res.append(isSum ? "Summary price: " : "Number of products: ").append("\n");
+        res.append(header).append("\n");
         res.append(value).append("\n");
         res.append("</body></html>").append("\n");
 
@@ -48,10 +46,10 @@ public class HtmlUtils {
     }
 
     public static String convertSum(int sum) {
-        return covertSumOrCount(sum, true);
+        return covertInt(sum, "Summary price: ");
     }
 
     public static String convertCount(int count) {
-        return covertSumOrCount(count, false);
+        return covertInt(count, "Number of products: ");
     }
 }

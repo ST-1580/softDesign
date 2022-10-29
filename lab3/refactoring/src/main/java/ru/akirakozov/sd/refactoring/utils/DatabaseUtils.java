@@ -66,11 +66,10 @@ public class DatabaseUtils {
         return items;
     }
 
-    private static Item getMaxOrMinItem(String dbName, boolean isMax) {
+    private static Item getItemFromQuery(String dbName, String query) {
         Item res = new Item("", 0L);
         try (Statement statement = connect(dbName).createStatement()) {
-            String sql = "SELECT * FROM PRODUCT ORDER BY PRICE " + (isMax ? "DESC " : "") + "LIMIT 1";
-            ResultSet rs = statement.executeQuery(sql);
+            ResultSet rs = statement.executeQuery(query);
 
             while (rs.next()) {
                 String name = rs.getString("name");
@@ -87,18 +86,17 @@ public class DatabaseUtils {
     }
 
     public static Item getMaxItem(final String dbName) {
-        return getMaxOrMinItem(dbName, true);
+        return getItemFromQuery(dbName, "SELECT * FROM PRODUCT ORDER BY PRICE DESC LIMIT 1");
     }
 
     public static Item getMinItem(final String dbName) {
-        return getMaxOrMinItem(dbName, false);
+        return getItemFromQuery(dbName, "SELECT * FROM PRODUCT ORDER BY PRICE LIMIT 1");
     }
 
-    private static int getSumOrCount(String dbName, boolean isSumQuery) {
+    private static int getIntFromQuery(String dbName, String query) {
         int res = 0;
         try (Statement statement = connect(dbName).createStatement()) {
-            String sql = "SELECT " + (isSumQuery ? "SUM(price)" : "COUNT(*)") + " FROM PRODUCT ";
-            ResultSet rs = statement.executeQuery(sql);
+            ResultSet rs = statement.executeQuery(query);
 
             while (rs.next()) {
                 res = rs.getInt(1);
@@ -113,10 +111,10 @@ public class DatabaseUtils {
     }
 
     public static int getSum(final String dbName) {
-        return getSumOrCount(dbName, true);
+        return getIntFromQuery(dbName, "SELECT SUM(price) FROM PRODUCT");
     }
 
     public static int getCount(final String dbName) {
-        return getSumOrCount(dbName, false);
+        return getIntFromQuery(dbName, "SELECT COUNT(*) FROM PRODUCT");
     }
 }
