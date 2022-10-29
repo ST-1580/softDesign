@@ -6,7 +6,10 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.SQLException;
 import java.sql.Statement;
+
+import ru.akirakozov.sd.refactoring.utils.DatabaseUtils;
 
 /**
  * @author akirakozov
@@ -19,14 +22,8 @@ public class AddProductServlet extends HttpServlet {
         long price = Long.parseLong(request.getParameter("price"));
 
         try {
-            try (Connection c = DriverManager.getConnection("jdbc:sqlite:test.db")) {
-                String sql = "INSERT INTO PRODUCT " +
-                        "(NAME, PRICE) VALUES (\"" + name + "\"," + price + ")";
-                Statement stmt = c.createStatement();
-                stmt.executeUpdate(sql);
-                stmt.close();
-            }
-        } catch (Exception e) {
+            DatabaseUtils.addItem(DatabaseUtils.PROD_DB, name, price);
+        } catch (SQLException e) {
             throw new RuntimeException(e);
         }
 
