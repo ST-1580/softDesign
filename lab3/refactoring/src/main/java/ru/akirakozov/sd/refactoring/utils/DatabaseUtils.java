@@ -54,13 +54,69 @@ public class DatabaseUtils {
 
             while (rs.next()) {
                 String name = rs.getString("name");
-                long price  = rs.getLong("price");
+                long price = rs.getLong("price");
                 items.add(new Item(name, price));
             }
-        } catch (SQLException ignored) {
 
+            rs.close();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
         }
 
         return items;
+    }
+
+    private static Item getMaxOrMinItem(String dbName, boolean isMax) {
+        Item res = new Item("", 0L);
+        try (Statement statement = connect(dbName).createStatement()) {
+            String sql = "SELECT * FROM PRODUCT ORDER BY PRICE " + (isMax ? "DESC " : "") + "LIMIT 1";
+            ResultSet rs = statement.executeQuery(sql);
+
+            while (rs.next()) {
+                String name = rs.getString("name");
+                long price = rs.getLong("price");
+                res = new Item(name, price);
+            }
+
+            rs.close();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
+        return res;
+    }
+
+    public static Item getMaxItem(final String dbName) {
+        return getMaxOrMinItem(dbName, true);
+    }
+
+    public static Item getMinItem(final String dbName) {
+        return getMaxOrMinItem(dbName, false);
+    }
+
+    private static int getSumOrCount(String dbName, boolean isSumQuery) {
+        int res = 0;
+        try (Statement statement = connect(dbName).createStatement()) {
+            String sql = "SELECT " + (isSumQuery ? "SUM(price)" : "COUNT(*)") + " FROM PRODUCT ";
+            ResultSet rs = statement.executeQuery(sql);
+
+            while (rs.next()) {
+                res = rs.getInt(1);
+            }
+
+            rs.close();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
+        return res;
+    }
+
+    public static int getSum(final String dbName) {
+        return getSumOrCount(dbName, true);
+    }
+
+    public static int getCount(final String dbName) {
+        return getSumOrCount(dbName, false);
     }
 }
