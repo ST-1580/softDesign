@@ -34,8 +34,7 @@ public class QueryServletTest {
         requestMock = mock(HttpServletRequest.class);
         responseMock = mock(HttpServletResponse.class);
 
-        stringWriter = new StringWriter();
-        when(responseMock.getWriter()).thenReturn(new PrintWriter(stringWriter));
+        updatePrinter();
 
         queryServlet = new QueryServlet();
 
@@ -45,6 +44,11 @@ public class QueryServletTest {
             header2Command.put("sum", "Summary price: \n");
             header2Command.put("count", "Number of products: \n");
         }
+    }
+
+    private void updatePrinter() throws IOException {
+        stringWriter = new StringWriter();
+        when(responseMock.getWriter()).thenReturn(new PrintWriter(stringWriter));
     }
 
     @After
@@ -84,7 +88,6 @@ public class QueryServletTest {
         Assert.assertEquals(stringWriter.toString(),
                 TestUtils.constructHtml(header2Command.get(queryCommand) + expectedAnswer));
 
-        clear();
-        init();
+        updatePrinter();
     }
 }
