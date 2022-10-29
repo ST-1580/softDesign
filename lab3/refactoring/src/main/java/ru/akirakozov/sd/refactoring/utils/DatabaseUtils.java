@@ -9,6 +9,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class DatabaseUtils {
+    public static final String PROD_DB = "jdbc:sqlite:test.db";
+
     public static Connection connect(String dbName) {
         Connection connection = null;
         try {
@@ -43,6 +45,7 @@ public class DatabaseUtils {
             statement.executeUpdate(sql);
         }
     }
+
     public static List<Item> getItems(final String dbName) {
         final List<Item> items = new ArrayList<>();
         try (Statement statement = connect(dbName).createStatement()) {

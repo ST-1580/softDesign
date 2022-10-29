@@ -17,7 +17,7 @@ import java.sql.Statement;
  */
 public class Main {
     public static void main(String[] args) throws Exception {
-        DatabaseUtils.createTable("jdbc:sqlite:test.db");
+        DatabaseUtils.createTable(DatabaseUtils.PROD_DB);
 
         Server server = new Server(8081);
 
